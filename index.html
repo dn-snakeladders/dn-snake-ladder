@@ -3,229 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Snake & Ladder Classic</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#f4f4f4;
-display:flex;
-flex-direction:column;
-align-items:center;
-padding:20px;
-}
-
-h1{
-margin-bottom:15px;
-color:#222;
-}
-
-#board{
-display:grid;
-grid-template-columns:repeat(10,50px);
-grid-template-rows:repeat(10,50px);
-border:3px solid #000;
-}
-
-.cell{
-width:50px;
-height:50px;
-border:1px solid #999;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:12px;
-font-weight:bold;
-position:relative;
-}
-
-.player1{
-width:18px;
-height:18px;
-background:red;
-border-radius:50%;
-position:absolute;
-bottom:4px;
-left:4px;
-}
-
-.player2{
-width:18px;
-height:18px;
-background:blue;
-border-radius:50%;
-position:absolute;
-top:4px;
-right:4px;
-}
-
-.controls{
-margin-top:20px;
-text-align:center;
-}
-
-button{
-padding:12px 25px;
-font-size:18px;
-cursor:pointer;
-border:none;
-border-radius:8px;
-background:#28a745;
-color:white;
-}
-
-button:hover{
-background:#218838;
-}
-
-#status{
-margin-top:15px;
-font-size:18px;
-font-weight:bold;
-}
-
-#dice{
-font-size:28px;
-margin:10px;
-color:#e91e63;
-}
-</style>
+<title>DN Snake & Ladder</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🐍 Snake & Ladder Classic</h1>
+<div id="homeScreen">
+    <img src="https://cdn-icons-png.flaticon.com/512/3097/3097133.png" class="logo">
+    <h1>DN Snake & Ladder</h1>
 
-<div id="board"></div>
-
-<div class="controls">
-<div id="dice">🎲 0</div>
-<button onclick="rollDice()">Roll Dice</button>
-<div id="status">Player 1 Turn</div>
+    <button class="mainBtn" onclick="showPlayers()">
+        Start Game
+    </button>
 </div>
 
-<script>
+<div id="playerScreen" class="hidden">
 
-const board=document.getElementById("board");
+    <h2>Select Players</h2>
 
-for(let row=9;row>=0;row--){
+    <div class="playerBtns">
+        <button onclick="startGame(1)">1 Player</button>
+        <button onclick="startGame(2)">2 Players</button>
+        <button onclick="startGame(3)">3 Players</button>
+        <button onclick="startGame(4)">4 Players</button>
+    </div>
 
-let nums=[];
+</div>
 
-for(let col=0;col<10;col++){
-nums.push(row*10+col+1);
-}
+<div id="gameScreen" class="hidden">
 
-if((9-row)%2===1){
-nums.reverse();
-}
+    <h2>DN Snake & Ladder</h2>
 
-nums.forEach(num=>{
-let cell=document.createElement("div");
-cell.className="cell";
-cell.id="cell-"+num;
-cell.innerText=num;
-board.appendChild(cell);
-});
-}
+    <div id="board"></div>
 
-const snakes={
-99:80,
-95:75,
-92:88,
-89:68,
-74:53,
-64:60,
-62:19,
-49:11,
-46:25,
-16:6
-};
+    <div class="controls">
+        <div id="dice">🎲</div>
 
-const ladders={
-2:38,
-7:14,
-8:31,
-15:26,
-21:42,
-28:84,
-36:44,
-51:67,
-71:91,
-78:98
-};
+        <button onclick="rollDice()">
+            Roll Dice
+        </button>
 
-let p1=1;
-let p2=1;
-let turn=1;
+        <h3 id="status">
+            Player 1 Turn
+        </h3>
+    </div>
 
-function renderPlayers(){
+</div>
 
-document.querySelectorAll(".player1,.player2").forEach(e=>e.remove());
-
-let token1=document.createElement("div");
-token1.className="player1";
-document.getElementById("cell-"+p1).appendChild(token1);
-
-let token2=document.createElement("div");
-token2.className="player2";
-document.getElementById("cell-"+p2).appendChild(token2);
-}
-
-renderPlayers();
-
-function rollDice(){
-
-let dice=Math.floor(Math.random()*6)+1;
-
-document.getElementById("dice").innerHTML="🎲 "+dice;
-
-if(turn===1){
-
-if(p1+dice<=100){
-p1+=dice;
-}
-
-if(ladders[p1]) p1=ladders[p1];
-if(snakes[p1]) p1=snakes[p1];
-
-if(p1===100){
-renderPlayers();
-document.getElementById("status").innerHTML="🏆 Player 1 Wins!";
-return;
-}
-
-turn=2;
-document.getElementById("status").innerHTML="Player 2 Turn";
-
-}else{
-
-if(p2+dice<=100){
-p2+=dice;
-}
-
-if(ladders[p2]) p2=ladders[p2];
-if(snakes[p2]) p2=snakes[p2];
-
-if(p2===100){
-renderPlayers();
-document.getElementById("status").innerHTML="🏆 Player 2 Wins!";
-return;
-}
-
-turn=1;
-document.getElementById("status").innerHTML="Player 1 Turn";
-}
-
-renderPlayers();
-}
-
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
